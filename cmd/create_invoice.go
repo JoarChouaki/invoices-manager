@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	http1 "invoices-manager/pkg/http"
 	"invoices-manager/pkg/models"
 
@@ -17,8 +16,6 @@ func (s *Server) CreateInvoice(w http.ResponseWriter, r *http.Request) {
 		http1.RespondBadRequest(w, r, "unable to parse input")
 		return
 	}
-
-	fmt.Println("invoice = ", invoice)
 
 	var user models.User
 	if err := s.GetContext(
