@@ -1,0 +1,32 @@
+version: '3.9'
+services:
+  invoices-manager:
+    container_name: invoices-manager
+    depends_on:
+      database:
+        condition: service_started
+    build:  
+      context: .
+      dockerfile: Dockerfile
+    networks:
+      - default
+    ports:
+      - "${APP_PORT}:${APP_PORT}"
+    env_file:
+      - .env
+    deploy:
+      restart_policy:
+        condition: on-failure
+
+  database:
+    image: 'postgres:14.2-alpine'
+    ports:
+      - "${POSTGRES_PORT}:${POSTGRES_INNER_PORT}"
+    env_file:
+      - .env
+    volumes:
+        - ./db/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+
+volumes:
+  database:
+    driver: local
